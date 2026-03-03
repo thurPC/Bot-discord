@@ -12,7 +12,6 @@ const client = new Client({
 
 const TOKEN = process.env.TOKEN;
 
-client.login(TOKEN);
 const ROLE_ATIVO = 'ID_CARGO_ATIVO';
 const ROLE_INATIVO = 'ID_CARGO_INATIVO';
 const ROLE_VALORANT = 'ID_CARGO_VALORANT';
