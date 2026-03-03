@@ -49,4 +49,4 @@ client.on('presenceUpdate', async (oldPresence, newPresence) => {
   }
 });
 
-client.login(TOKEN);
+client.login(TOKEN); // ✅ SOMENTE AQUI
