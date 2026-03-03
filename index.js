@@ -1,5 +1,11 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 
+// 🔐 Verificação forte do TOKEN
+if (!process.env.TOKEN) {
+  console.error("❌ TOKEN não encontrado no ambiente.");
+  process.exit(1);
+}
+
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -10,43 +16,56 @@ const client = new Client({
   ]
 });
 
-const TOKEN = process.env.TOKEN;
+// 🎭 COLOQUE AQUI OS IDs REAIS DOS CARGOS
+const ROLE_ATIVO = 'minecraft (teste)';
+const ROLE_INATIVO = 'COLOQUE_AQUI_ID';
+const ROLE_VALORANT = 'COLOQUE_AQUI_ID';
 
-const ROLE_ATIVO = 'ID_CARGO_ATIVO';
-const ROLE_INATIVO = 'ID_CARGO_INATIVO';
-const ROLE_VALORANT = 'ID_CARGO_VALORANT';
-
-client.on('ready', () => {
-  console.log(`Bot online como ${client.user.tag}`);
+client.once('ready', () => {
+  console.log(`✅ Bot online como ${client.user.tag}`);
 });
 
-client.on('messageCreate', async message => {
+// 💬 Quando enviar mensagem → vira ATIVO
+client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
 
   const member = message.member;
+  if (!member) return;
 
-  if (!member.roles.cache.has(ROLE_ATIVO)) {
-    await member.roles.add(ROLE_ATIVO);
-  }
+  try {
+    if (!member.roles.cache.has(ROLE_ATIVO)) {
+      await member.roles.add(ROLE_ATIVO);
+    }
 
-  if (member.roles.cache.has(ROLE_INATIVO)) {
-    await member.roles.remove(ROLE_INATIVO);
+    if (member.roles.cache.has(ROLE_INATIVO)) {
+      await member.roles.remove(ROLE_INATIVO);
+    }
+  } catch (err) {
+    console.error("Erro ao atualizar cargos:", err.message);
   }
 });
 
+// 🎮 Detectar se está jogando VALORANT
 client.on('presenceUpdate', async (oldPresence, newPresence) => {
-  if (!newPresence) return;
+  if (!newPresence || !newPresence.member) return;
 
   const member = newPresence.member;
   const activities = newPresence.activities;
 
-  const jogandoValorant = activities.some(a => a.name === "VALORANT");
+  const jogandoValorant = activities.some(
+    activity => activity.name === "VALORANT"
+  );
 
-  if (jogandoValorant) {
-    await member.roles.add(ROLE_VALORANT).catch(() => {});
-  } else {
-    await member.roles.remove(ROLE_VALORANT).catch(() => {});
+  try {
+    if (jogandoValorant) {
+      await member.roles.add(ROLE_VALORANT);
+    } else {
+      await member.roles.remove(ROLE_VALORANT);
+    }
+  } catch (err) {
+    console.error("Erro ao atualizar cargo VALORANT:", err.message);
   }
 });
 
-client.login(TOKEN); // ✅ SOMENTE AQUI
+// 🚀 Login
+client.login(process.env.TOKEN);
