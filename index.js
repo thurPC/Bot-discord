@@ -11,6 +11,7 @@ const client = new Client({
 });
 
 // TOKEN vindo do Render
+console.log("TOKEN:", process.env.TOKEN);
 const TOKEN = process.env.TOKEN;
 
 // IDs dos cargos (COLOQUE OS IDs REAIS AQUI)
