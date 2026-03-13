@@ -1,4 +1,4 @@
-console.log("TOKEN:", process.env.TOKEN);
+console.log("Variáveis:", process.env);
 const { Client, GatewayIntentBits } = require('discord.js');
 
 // 🔐 Verificação forte do TOKEN
