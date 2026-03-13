@@ -19,8 +19,6 @@ const client = new Client({
 
 // 🎭 COLOQUE AQUI OS IDs REAIS DOS CARGOS
 const ROLE_ATIVO = 'minecraft (teste)';
-const ROLE_INATIVO = 'COLOQUE_AQUI_ID';
-const ROLE_VALORANT = 'COLOQUE_AQUI_ID';
 
 client.once('ready', () => {
   console.log(`✅ Bot online como ${client.user.tag}`);
